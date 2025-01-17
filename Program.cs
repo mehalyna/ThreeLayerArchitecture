@@ -1,4 +1,7 @@
 using DAL;
+using Microsoft.EntityFrameworkCore;
+using ThreeLayerArchitecture.DAL;
+using ThreeLayerArchitecture.DAL.Repositories;
 
 namespace ThreeLayerArchitecture
 {
@@ -13,6 +16,10 @@ namespace ThreeLayerArchitecture
             builder.Services.AddSingleton(new DatabaseHelper(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<CustomerRepository>();
             builder.Services.AddScoped<ProductRepository>();
+
+            builder.Services.AddDbContext<OrderSystemDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 
